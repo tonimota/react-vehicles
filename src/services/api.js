@@ -1,8 +1,8 @@
 import vehicles from './http'
 
-export const getAllCars = (id) => {
-  return vehicles.get(`/carros/marcas/${id}/modelos`)
-}
+// export const getAllCars = (id) => {
+//   return vehicles.get(`/carros/marcas/${id}/modelos`)
+// }
 export const getAllBrand = (type) => {
   return vehicles.get(`/${type}/marcas`)
 }

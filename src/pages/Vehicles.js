@@ -12,8 +12,9 @@ class VehiclesContainer extends React.Component {
       'motos',
       'caminhoes'
     ],
-    vehicleSelect: '',
     vehicleBrand: [],
+    vehicleSelect: '',
+    brandSelect: '',
     vehicleYear: '',
     vehicleValue: '',
     labelType: {
@@ -35,10 +36,11 @@ class VehiclesContainer extends React.Component {
     })
     this.getAllBrand(value)
   }
-  // getAllCars = async () => { 
-  //   const response = await getAllCars('7') 
-  //   console.log(response.data) 
-  // }
+  getBrand = (value) => {
+    this.setState({
+      brandSelect: value,
+    })
+  }
   getAllBrand = async (value) => {
     const response = await getAllBrand(value)
     let brands = []
@@ -55,8 +57,10 @@ class VehiclesContainer extends React.Component {
         <Container className="container">
           <Row>
             <p  style={{ width: '100%' }}>Veiculo: {this.state.vehicleSelect} </p>
+            <p  style={{ width: '100%' }}>Marca: {this.state.brandSelect} </p>
             <Dropdown types={this.state.vehicleType} selectType={(String) => this.getType(String)} label={this.state.labelType.value}/>
-            <Dropdown types={this.state.vehicleBrand} selectType={(String) => this.getType(String)} label={this.state.labelBrand.value}/>
+            <Dropdown types={this.state.vehicleBrand} selectType={(String) => this.getBrand(String)} label={this.state.labelBrand.value}/>
+            
           </Row>
         </Container>
       </Row>
