@@ -1,32 +1,65 @@
 import React from 'react'
 // import Grid from 'react-bootstrap/Grid';
-import { Button, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container'
-import {getAllCars} from '../services/api'
+import {getAllCars, getAllBrand} from '../services/api'
 import Dropdown from '../components/Dropdown/Dropdown'
 
 class VehiclesContainer extends React.Component {
   state = {
-    vehicleType: '',
-    vehicleBrand: '',
+    vehicleType: [
+      'carros',
+      'motos',
+      'caminhoes'
+    ],
+    vehicleSelect: '',
+    vehicleBrand: [],
     vehicleYear: '',
     vehicleValue: '',
+    labelType: {
+      value: 'Selecione um tipo de veiculo'
+    },
+    labelBrand: {
+      value: 'Selecione uma Marca'
+    },
+    labelYear: {
+      value: 'Selecione um Ano'
+    },
+    labelPrice: {
+      value: 'Selecione por Preço'
+    },
   }
-  getAllCars = async () => { 
-    const response = await getAllCars('7') 
-    console.log(response.data) 
+  getType = (value) => {
+    this.setState({
+      vehicleSelect: value,
+    })
+    this.getAllBrand(value)
+  }
+  // getAllCars = async () => { 
+  //   const response = await getAllCars('7') 
+  //   console.log(response.data) 
+  // }
+  getAllBrand = async (value) => {
+    const response = await getAllBrand(value)
+    let brands = []
+    response.data.forEach(index => {
+      brands.push(index.nome)
+    });
+    this.setState({
+      vehicleBrand: brands
+    })
   }
   render() {
     return (
       <Row>
-        <Container className="container"
-        style={{ margin: '0 auto' }}>
+        <Container className="container">
           <Row>
-            <Dropdown/>
-            <Button onClick={this.getAllCars}> Get All Cars for Model </Button>
+            <p  style={{ width: '100%' }}>Veiculo: {this.state.vehicleSelect} </p>
+            <Dropdown types={this.state.vehicleType} selectType={(String) => this.getType(String)} label={this.state.labelType.value}/>
+            <Dropdown types={this.state.vehicleBrand} selectType={(String) => this.getType(String)} label={this.state.labelBrand.value}/>
           </Row>
         </Container>
-        </Row>
+      </Row>
     )
   }
 }

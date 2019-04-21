@@ -3,31 +3,25 @@ import { Dropdown } from 'react-bootstrap';
 import '../Dropdown/Dropdown.scss';
 
 class DropdownBtn extends React.Component{
-  state = {
-    label: "Selecione um tipo de veiculo",
-    vehicleType: ""
-  }
-
-  selectedVehicle = (value) => {
-    let label = value.charAt(0).toUpperCase() + value.slice(1);
-    this.setState({
-      label: label,
-      vehicleType: value
-    })
-  }
-
+ 
   render() {
+    let type = this.props.types;
+    let itens = []
+    type.forEach(index => {
+      itens.push(<Dropdown.Item key={index} onClick={() => this.props.selectType(`${index}`)} >{index}</Dropdown.Item>)
+    });
+
     return (
-      <Dropdown>
-        <Dropdown.Toggle variant="success" id="dropdown-basic">
-        {this.state.label}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => this.selectedVehicle("carro")}>Carro</Dropdown.Item>
-          <Dropdown.Item onClick={() => this.selectedVehicle("moto")}>Moto</Dropdown.Item>
-          <Dropdown.Item onClick={() => this.selectedVehicle("caminhao")}>Caminhão</Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <div>
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          {this.props.label}
+          </Dropdown.Toggle>
+          <Dropdown.Menu className="scrollable-menu">
+            {itens}
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
     )
   }
 }
