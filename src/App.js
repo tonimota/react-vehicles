@@ -8,8 +8,7 @@ import 'bootstrap/scss/bootstrap.scss'
 class App extends Component {
   render() {
     return (
-      <Container fluid={true}>
-        <h1>Vehicles</h1>
+      <Container>
         <Switch>
           <Route path="/" exact={true} component={VehiclesContainer} />
         </Switch>
