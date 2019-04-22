@@ -11,7 +11,7 @@ class VehiclesContainer extends React.Component {
   state = {
     labelType: {
       typeSelect: '',
-      value: 'Selecione um tipo de veiculo',
+      value: 'Selecione um Tipo',
       label: {
         name: [
           'carros',
@@ -45,7 +45,7 @@ class VehiclesContainer extends React.Component {
     labelModel: {
       selectedModel: '',
       id: '',
-      value: 'Selecione um modelo',
+      value: 'Selecione um Modelo',
       label: {
         name: []
       },
@@ -142,7 +142,7 @@ class VehiclesContainer extends React.Component {
       <Row>
         <Container className="container">
           <Row>
-            <h1>Vehicles</h1>
+            <h1>Veículos</h1>
             <p  style={{ width: '100%' }}>Tipo: {this.state.labelType.typeSelect} </p>
             <p  style={{ width: '100%' }}>Marca: {this.state.labelBrand.brandSelect} </p>
             <p  style={{ width: '100%' }}>Modelo: {this.state.labelModel.selectedModel} </p>
