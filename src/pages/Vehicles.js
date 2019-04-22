@@ -2,10 +2,12 @@ import React from 'react'
 // import Grid from 'react-bootstrap/Grid';
 import { Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container'
-import {getAllBrand, getByBrand} from '../services/api'
+import {getByType, getByBrand, getYearByModel, getPrice} from '../services/api'
 import Dropdown from '../components/Dropdown/Dropdown'
+import Card from '../components/Card/CardDetail'
 
 class VehiclesContainer extends React.Component {
+  
   state = {
     labelType: {
       typeSelect: '',
@@ -20,6 +22,7 @@ class VehiclesContainer extends React.Component {
     },
     labelBrand: {
       brandSelect: '',
+      id: '',
       value: 'Selecione uma Marca',
       label: {
         name: []
@@ -28,6 +31,7 @@ class VehiclesContainer extends React.Component {
     },
     labelYear: {
       yearSelect:'',
+      id: '',
       value: 'Selecione um Ano',
       label: {
         name: []
@@ -36,9 +40,43 @@ class VehiclesContainer extends React.Component {
     },
     labelPrice: {
       value: 'Selecione por Preço',
-      priceSelect: 'fdiowfj'
+      priceSelect: ''
     },
-    models: []
+    labelModel: {
+      selectedModel: '',
+      id: '',
+      value: 'Selecione um modelo',
+      label: {
+        name: []
+      },
+      models: [],
+    },
+    detail: {}
+  }
+  labelItens = (itens) => {
+    let list = []
+    itens.forEach(index => {
+      list.push(index.nome)
+    })
+    return list
+  }
+  getId = (name, list) => {
+    let id = ''
+    list.forEach(index => {
+      if(index.nome === name) {
+        id = index.codigo
+      }
+    })
+    return id
+  }
+  getModel = (value) => {
+    let labelModel = Object.assign({}, this.state.labelModel);
+    labelModel.selectedModel = value
+    labelModel.id = this.getId(value, labelModel.models)
+    this.setState((state,props) => ({
+      labelModel,
+    }))
+    this.getYearByModel(labelModel.id)
   }
   getType = (value) => {
     let labelType = Object.assign({}, this.state.labelType);
@@ -46,92 +84,76 @@ class VehiclesContainer extends React.Component {
     this.setState((state,props) => ({
       labelType,
     }))
-    this.getAllBrand(value)
+    this.getByType(value)
   }
   getBrand = (value) => {
     let labelBrand = Object.assign({}, this.state.labelBrand);
     labelBrand.brandSelect = value
+    labelBrand.id = this.getId(value, labelBrand.list)
     this.setState((state, props) => ({
       labelBrand,
     }))
-    this.getIdBrand(value)
+    this.getByBrand(labelBrand.id)
   }
-  getYear = (value) => {
+  getPrice = async (value) => {
     let labelYear = Object.assign({}, this.state.labelYear);
     labelYear.yearSelect = value
+    const type = this.state.labelType.typeSelect
+    const brand = this.state.labelBrand.id
+    const model = this.state.labelModel.id
+    let id =  this.getId(value, this.state.labelYear.list)
+    const response = await getPrice(type, brand, model, id )
     this.setState((state, props) => ({
-      labelYear,
+      labelYear: labelYear,
+      detail: response.data
     }))
   }
-  getPrice = (value) => {
-    let labelPrice = Object.assign({}, this.state.labelPrice);
-    labelPrice.priceSelect = value
-    this.setState((state, props) => ({
-      labelPrice,
-    }))
-  }
-  getAllBrand = async (value) => {
-    const response = await getAllBrand(value)
-    let brands = []
-    let itens = []
+  getByType = async (value) => {
+    const response = await getByType(value)
     let labelBrand = Object.assign({}, this.state.labelBrand);
-    response.data.forEach(index => {
-      brands.push(index.nome)
-      itens.push(index)
-    });
-    labelBrand.label.name = brands
-    labelBrand.list = itens
+    labelBrand.label.name = this.labelItens(response.data)
+    labelBrand.list = response.data
     this.setState((state, props) => ({
       labelBrand
     }))
   }
-
-  getIdBrand = (brand) => {
-    let list = this.state.labelBrand.list
-    let id = ''
-    list.forEach(index => {
-      if(index.nome === brand) {
-        id = index.codigo
-      }
-    })
-    if(id) {this.getByBrand(id)}
-  }
-
   getByBrand = async (id) => {
-    let labelYear = Object.assign({}, this.state.labelYear);
-    let years = []
-    let itens = []
+    let labelModel = Object.assign({}, this.state.labelModel);
     const response = await getByBrand(this.state.labelType.typeSelect, id)
-    response.data.anos.forEach(index => {
-      years.push(index.nome)
-      itens.push(index)
-    })
+    labelModel.label.name = this.labelItens(response.data.modelos)
+    labelModel.models = response.data.modelos
     this.setState((state, props) => ({
-      models: response.data.modelos
+      labelModel
     }))
-    labelYear.label.name = years
-    labelYear.list = itens
-    this.setState((state, props) => ({
-      labelYear
-    }))
-    console.log(this.state.models)
   }
-
-
+  getYearByModel = async (model) => {
+    let labelYear = Object.assign({}, this.state.labelYear);
+    const type = this.state.labelType.typeSelect
+    const brand = this.state.labelBrand.id
+    const response = await getYearByModel(type, brand, model)
+    labelYear.label.name = this.labelItens(response.data)
+    labelYear.list = response.data
+    this.setState((state, props) => ({
+      labelYear,
+    }))
+  }
   render() {
     return (
       <Row>
         <Container className="container">
           <Row>
             <h1>Vehicles</h1>
-            <p  style={{ width: '100%' }}>Veiculo: {this.state.labelType.typeSelect} </p>
+            <p  style={{ width: '100%' }}>Tipo: {this.state.labelType.typeSelect} </p>
             <p  style={{ width: '100%' }}>Marca: {this.state.labelBrand.brandSelect} </p>
-            <p  style={{ width: '100%' }}>Marca: {this.state.labelYear.yearSelect} </p>
-            {/* <p  style={{ width: '100%' }}>Marca: {this.state.labelPrice.priceSelect} </p> */}
+            <p  style={{ width: '100%' }}>Modelo: {this.state.labelModel.selectedModel} </p>
+            <p  style={{ width: '100%' }}>Ano: {this.state.labelYear.yearSelect} </p>
             <Dropdown types={this.state.labelType.label.name} selectType={(String) => this.getType(String)} label={this.state.labelType.value}/>
             <Dropdown types={this.state.labelBrand.label.name} selectType={(String) => this.getBrand(String)} label={this.state.labelBrand.value}/>
-            <Dropdown types={this.state.labelYear.label.name} selectType={(String) => this.getYear(String)} label={this.state.labelYear.value}/>
-            
+            <Dropdown types={this.state.labelModel.label.name} selectType={(String) => this.getModel(String)} label={this.state.labelModel.value}/>
+            <Dropdown types={this.state.labelYear.label.name} selectType={(String) => this.getPrice(String)} label={this.state.labelYear.value}/>
+          </Row>
+          <Row>
+            <Card detail={this.state.detail}></Card>
           </Row>
         </Container>
       </Row>
