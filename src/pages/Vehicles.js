@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container'
 import {getByType, getByBrand, getYearByModel, getPrice} from '../services/api'
 import Dropdown from '../components/Dropdown/Dropdown'
 import Card from '../components/Card/CardDetail'
+import './Vehicle.scss'
 
 class VehiclesContainer extends React.Component {
   
@@ -143,10 +144,10 @@ class VehiclesContainer extends React.Component {
         <Container className="container">
           <Row>
             <h1>Veículos</h1>
-            <p  style={{ width: '100%' }}>Tipo: {this.state.labelType.typeSelect} </p>
-            <p  style={{ width: '100%' }}>Marca: {this.state.labelBrand.brandSelect} </p>
-            <p  style={{ width: '100%' }}>Modelo: {this.state.labelModel.selectedModel} </p>
-            <p  style={{ width: '100%' }}>Ano: {this.state.labelYear.yearSelect} </p>
+            <p>Tipo: {this.state.labelType.typeSelect} </p>
+            <p>Marca: {this.state.labelBrand.brandSelect} </p>
+            <p>Modelo: {this.state.labelModel.selectedModel} </p>
+            <p>Ano: {this.state.labelYear.yearSelect} </p>
             <Dropdown types={this.state.labelType.label.name} selectType={(String) => this.getType(String)} label={this.state.labelType.value}/>
             <Dropdown types={this.state.labelBrand.label.name} selectType={(String) => this.getBrand(String)} label={this.state.labelBrand.value}/>
             <Dropdown types={this.state.labelModel.label.name} selectType={(String) => this.getModel(String)} label={this.state.labelModel.value}/>
