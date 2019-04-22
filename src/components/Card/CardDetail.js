@@ -5,17 +5,44 @@ import noimage from '../../assets/imgs/noimage.png'
 
 class CardDetail extends React.Component{
   render() {
+    let detail = this.props.detail
+    let el = ''
+    if(Object.values(detail).length > 0) {
+      el = <Card>
+            <Card.Img variant="top" src={noimage} />
+            <Card.Body>
+              <h3>{detail.Modelo}</h3>
+              <p>
+                <strong>AnoModelo: </strong>
+                <span>{detail.AnoModelo}</span>
+              </p>
+              <p>
+                <strong>CodigoFipe: </strong>
+                <span>{detail.CodigoFipe}</span>
+              </p>
+              <p>
+                <strong>Combustivel: </strong>
+                <span>{detail.Combustivel}</span>
+              </p>
+              <p>
+                <strong>Marca: </strong>
+                <span>{detail.Marca}</span>
+              </p>
+              <p>
+                <strong>MesReferencia: </strong>
+                <span>{detail.MesReferencia}</span>
+              </p>
+              <p>
+                <strong>Valor: </strong>
+                <span>{detail.Valor}</span>
+              </p>
+          </Card.Body>
+        </Card>
+    }
     return (
-      <Card>
-        <Card.Img variant="top" src="holder.js/100px180" />
-        <Card.Body>
-          <Card.Title>{this.props.modelo}</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the bulk of
-            the card's content.
-          </Card.Text>
-        </Card.Body>
-      </Card>
+      <div>
+        {el}
+      </div>
     )
   }
 }

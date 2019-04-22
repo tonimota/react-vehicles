@@ -1,22 +1,19 @@
-.card-deck {
+.card {
   margin-top: 100px;
-  .card {
-    height: 170px;
-    min-width: 356px;
-    margin-bottom: 20px  !important;
-    img {
-      max-width: 50px;
-      display: block;
-      margin: 0 auto;
-      padding-top: 20px;
-    }
-    .card-body {
-      .card-title {
-        text-align: center;
-      }
+  min-width: 356px;
+  margin-bottom: 20px  !important;
+  img {
+    max-width: 50px;
+    display: block;
+    margin: 0 auto;
+    padding-top: 20px;
+  }
+  .card-body {
+    .card-title {
+      text-align: center;
     }
   }
-  .active {
-    border: 2px solid blue;  
-  }
+}
+.active {
+  border: 2px solid blue;  
 }
